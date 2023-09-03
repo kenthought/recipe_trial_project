@@ -13,13 +13,10 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
     if(process.server) {
         const temp : any = useCookie("refresh")
         refreshToken = temp.value as string
-
-        console.log("Server:", refreshToken)
     }
 
     if(process.client) {
         refreshToken = getCookie("refresh") as string
-        console.log("Client:", refreshToken)
     }
 
     if (refreshToken != null) {
@@ -38,12 +35,10 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
                     access.value = token.access;
                     const refresh = useCookie("refresh");
                     refresh.value = token.refresh;
-                    console.log("server:", token.refresh)
                 }
                 if(process.client) {
                     setCookie("access", token.access)
                     setCookie("refresh", token.refresh)
-                    console.log("client:", token.refresh)
                 }
             })
         }  else {
@@ -74,7 +69,7 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
                 "Content-Type": "application/json",
                 accept: "application/json",
             }
-            console.log("client header:", headers)
+            // console.log("client header:", headers)
         }
     }  else {
         console.log('Refresh token not available.');

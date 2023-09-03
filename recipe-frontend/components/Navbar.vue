@@ -172,7 +172,7 @@
       </div>
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <NuxtLink to="/dashboard">
+        <NuxtLink to="/dashboard/my_recipe">
           <a
             href="/dashboard/my_recipe"
             class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"

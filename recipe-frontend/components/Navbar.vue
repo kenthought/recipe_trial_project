@@ -13,11 +13,26 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a
-                href="#"
-                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                aria-current="page"
-                >Dashboard</a
+              <NuxtLink to="/dashboard">
+                <a
+                  href="/dashboard"
+                  class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                  aria-current="page"
+                  >Recipes</a
+                ></NuxtLink
+              >
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+              <NuxtLink to="/dashboard/my_recipe">
+                <a
+                  href="/dashboard/my_recipe"
+                  class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                  aria-current="page"
+                  >My Recipe</a
+                ></NuxtLink
               >
             </div>
           </div>
@@ -146,11 +161,24 @@
     <div class="md:block" id="mobile-menu" v-if="mobileMenu">
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a
-          href="#"
-          class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-          aria-current="page"
-          >Dashboard</a
+        <NuxtLink to="/dashboard">
+          <a
+            href="/dashboard"
+            class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+            aria-current="page"
+            >Recipes</a
+          ></NuxtLink
+        >
+      </div>
+      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+        <NuxtLink to="/dashboard">
+          <a
+            href="/dashboard/my_recipe"
+            class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+            aria-current="page"
+            >My Recipe</a
+          ></NuxtLink
         >
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
@@ -201,9 +229,6 @@ const userMenu = ref(false);
 const mobileMenu = ref(false);
 
 const logout = () => {
-  localStorage.removeItem("access");
-  localStorage.removeItem("refresh");
-  localStorage.removeItem("user_id");
   removeCookie("access");
   removeCookie("refresh");
   removeCookie("user_id");

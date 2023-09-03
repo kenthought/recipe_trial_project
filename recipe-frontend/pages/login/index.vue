@@ -57,8 +57,6 @@
             Sign in
           </button>
         </div>
-
-        <pre>{{ auth.user }}</pre>
       </form>
     </div>
   </div>

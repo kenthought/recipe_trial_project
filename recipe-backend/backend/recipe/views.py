@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
-# Create your views here.
+    
 class RecipeList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -25,7 +25,6 @@ class RecipeList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class RecipeDetail(APIView):
     permissions_clases = [permissions.IsAuthenticated]
@@ -53,4 +52,19 @@ class RecipeDetail(APIView):
         recipe = self.get_object(pk)
         recipe.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# Fetch user recipes
+class RecipeUserList(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, user):
+        try:
+            return Recipe.objects.filter(user_id=user)
+        except Recipe.DoesNotExist:
+            raise Http404
+
+    def get(self, request, user, format=None):
+        recipe = self.get_object( user)
+        serializer = RecipeViewSerializer(recipe, many=True)
+        return Response(serializer.data)
 

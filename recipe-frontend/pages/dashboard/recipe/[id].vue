@@ -4,6 +4,9 @@
       <div class="pt-6" v-if="pending">
         <p>Loading...</p>
       </div>
+      <div class="pt-6" v-else-if="error">
+        <p>{{ error }}</p>
+      </div>
       <div class="pt-6" v-else>
         <nav aria-label="Breadcrumb" v-if="data.user.id == user.id">
           <ol
@@ -47,7 +50,7 @@
               class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg"
             >
               <img
-                src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg"
+                src="https://picsum.photos/200/300"
                 alt="Model wearing plain white basic tee."
                 class="h-full w-full object-cover object-center"
               />
@@ -98,8 +101,6 @@
 import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
 import { useCustomFetch } from "../../../composables/useCustomFetch";
-import AddRecipeModal from "../../../components/modals/AddRecipeModal.vue";
-import DeleteRecipeModal from "../../../components/modals/DeleteRecipeModal.vue";
 
 const auth = authStore();
 const route = useRoute();
@@ -111,7 +112,6 @@ const user: any = auth.user;
 const { data, error, pending, refresh }: any = useCustomFetch(
   "recipe/" + route.params.id,
   {
-    server: false,
     lazy: true,
   }
 );

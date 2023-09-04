@@ -107,7 +107,7 @@
                           ></textarea>
                         </div>
                       </div>
-
+                      <!-- For uploading recipe photo -->
                       <!-- <div class="col-span-full">
                         <label
                           for="photo"
@@ -160,8 +160,16 @@
             </div>
 
             <!-- Toast -->
-            <Success :success="success" :successText="successText" />
-            <Error :error="errorState" :errorText="errorText" />
+            <Success
+              v-show="successState.success"
+              :successText="successState.text"
+              @close-save="successState.success = false"
+            />
+            <Error
+              v-show="errorState.error"
+              :errorText="errorState.text"
+              @close-error="errorState.error = false"
+            />
             <div
               class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
             >
@@ -186,10 +194,8 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useCustomFetch } from "../../composables/useCustomFetch";
-import { authStore } from "../../stores/authStore";
-import Success from "../utility/Success.vue";
-import Error from "../utility/Error.vue";
+import { useCustomFetch } from "../composables/useCustomFetch";
+import { authStore } from "../stores/authStore";
 import { ref } from "vue";
 const auth = authStore();
 const props = defineProps({
@@ -214,10 +220,8 @@ let form: any = props.isEditing
       instructions: "",
       user: 0,
     };
-let success = ref(false);
-let successText = "";
-let errorState = ref(false);
-let errorText = "";
+let successState = reactive({ success: false, text: "" });
+let errorState = reactive({ error: false, text: "" });
 
 const handleSuccess = () => {
   form = {
@@ -226,10 +230,10 @@ const handleSuccess = () => {
     instructions: "",
     user: 0,
   };
-  successText = props.isEditing
+  successState.text = props.isEditing
     ? "Recipe edited successfully!"
     : "Recipe added successfully!";
-  success = ref(true);
+  successState.success = true;
   props.refresh();
 };
 
@@ -251,8 +255,8 @@ const handleSubmit = async () => {
   if (error.value == null) {
     handleSuccess();
   } else {
-    errorState = ref(true);
-    errorText = error.value;
+    errorState.text = error.value;
+    errorState.error = true;
   }
 };
 </script>

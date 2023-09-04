@@ -32,6 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
             "middle_name",
             "last_name",
             "is_staff",
+            "is_superuser",
         ]
 
 
@@ -47,6 +48,7 @@ class UserWriteSerializer(serializers.ModelSerializer):
             "middle_name",
             "last_name",
             "is_staff",
+            "is_superuser",
         ]
 
     def create(self, validated_data):

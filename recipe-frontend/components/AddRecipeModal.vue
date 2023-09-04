@@ -194,7 +194,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useCustomFetch } from "../composables/useCustomFetch";
 import { authStore } from "../stores/authStore";
 import { ref } from "vue";
 const auth = authStore();

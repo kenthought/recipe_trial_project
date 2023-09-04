@@ -56,9 +56,8 @@
 </template>
 
 <script setup lang="ts">
-import { authStore } from "../stores/authStore";
+import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
-import { useCustomFetch } from "../composables/useCustomFetch";
 
 const auth = authStore();
 await auth.fetchUser();

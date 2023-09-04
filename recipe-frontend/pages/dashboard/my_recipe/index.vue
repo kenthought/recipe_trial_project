@@ -71,9 +71,8 @@
 </template>
 
 <script setup lang="ts">
-import { authStore } from "../../../stores/authStore";
+import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
-import { useCustomFetch } from "../../../composables/useCustomFetch";
 import { ref } from "vue";
 
 const auth = authStore();

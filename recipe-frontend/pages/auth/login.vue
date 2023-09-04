@@ -71,7 +71,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { authStore } from "../../stores/authStore";
+import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
 const auth = authStore();
 

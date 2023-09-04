@@ -1,6 +1,8 @@
 import { authStore } from "~/stores/authStore";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+//Restrict basic user from viewing admin dashboard
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const auth = authStore();
-  if (!auth.isLoggedIn) return navigateTo("/auth/login", {replace: true});
+  await auth.fetchUser()
+  if (!auth.user?.is_superuser) return navigateTo("/", {replace: true});
 });

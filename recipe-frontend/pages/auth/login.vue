@@ -57,6 +57,15 @@
             Sign in
           </button>
         </div>
+
+        <p class="mt-10 text-center text-sm text-gray-500">
+          Not a member?
+          <NuxtLink
+            to="/auth/register"
+            class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >Sign up</NuxtLink
+          >
+        </p>
       </form>
     </div>
   </div>

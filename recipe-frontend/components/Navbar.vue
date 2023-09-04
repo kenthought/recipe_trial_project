@@ -34,6 +34,18 @@
               >
             </div>
           </div>
+          <div class="hidden md:block" v-show="user?.is_superuser == 1">
+            <div class="ml-10 flex items-baseline space-x-4">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+              <NuxtLink
+                to="/admin"
+                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                aria-current="page"
+              >
+                Go to admin</NuxtLink
+              >
+            </div>
+          </div>
         </div>
         <div class="hidden md:block">
           <div class="ml-4 flex items-center md:ml-6">
@@ -159,6 +171,15 @@
           aria-current="page"
           >My Recipe
         </NuxtLink>
+      </div>
+      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        <NuxtLink
+          to="/admin"
+          class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+          aria-current="page"
+        >
+          Go to admin</NuxtLink
+        >
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">

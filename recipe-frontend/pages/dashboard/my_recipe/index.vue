@@ -91,5 +91,6 @@ const addRecipeModal = ref(false);
 
 definePageMeta({
   middleware: ["auth"],
+  layout: false,
 });
 </script>

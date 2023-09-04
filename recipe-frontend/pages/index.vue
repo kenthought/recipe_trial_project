@@ -71,5 +71,6 @@ const {
 
 definePageMeta({
   middleware: ["auth"],
+  layout: false,
 });
 </script>

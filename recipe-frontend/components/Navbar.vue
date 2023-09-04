@@ -13,26 +13,24 @@
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <NuxtLink to="/dashboard">
-                <a
-                  href="/dashboard"
-                  class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                  aria-current="page"
-                  >Recipes</a
-                ></NuxtLink
+              <NuxtLink
+                to="/"
+                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                aria-current="page"
+              >
+                Recipes</NuxtLink
               >
             </div>
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <NuxtLink to="/dashboard/my_recipe">
-                <a
-                  href="/dashboard/my_recipe"
-                  class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-                  aria-current="page"
-                  >My Recipe</a
-                ></NuxtLink
+              <NuxtLink
+                to="/dashboard/my_recipe"
+                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                aria-current="page"
+              >
+                My Recipe</NuxtLink
               >
             </div>
           </div>
@@ -80,22 +78,6 @@
                 v-on:focusout="userMenu = false"
               >
                 <!-- Active: "bg-gray-100", Not Active: "" -->
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabindex="-1"
-                  id="user-menu-item-0"
-                  >Your Profile</a
-                >
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-sm text-gray-700"
-                  role="menuitem"
-                  tabindex="-1"
-                  id="user-menu-item-1"
-                  >Settings</a
-                >
                 <a
                   href="#"
                   class="block px-4 py-2 text-sm text-gray-700"
@@ -161,25 +143,22 @@
     <div class="md:block" id="mobile-menu" v-if="mobileMenu">
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <NuxtLink to="/dashboard">
-          <a
-            href="/dashboard"
-            class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-            aria-current="page"
-            >Recipes</a
-          ></NuxtLink
+        <NuxtLink
+          to="/"
+          class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+          aria-current="page"
         >
+          Recipes
+        </NuxtLink>
       </div>
       <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <NuxtLink to="/dashboard/my_recipe">
-          <a
-            href="/dashboard/my_recipe"
-            class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
-            aria-current="page"
-            >My Recipe</a
-          ></NuxtLink
-        >
+        <NuxtLink
+          to="/dashboard/my_recipe"
+          class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+          aria-current="page"
+          >My Recipe
+        </NuxtLink>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">
         <div class="flex items-center px-5">
@@ -192,24 +171,14 @@
           </div>
           <div class="ml-3">
             <div class="text-base font-medium leading-none text-white">
-              Tom Cook
+              {{ user?.first_name }}
             </div>
             <div class="text-sm font-medium leading-none text-gray-400">
-              tom@example.com
+              {{ user?.email }}
             </div>
           </div>
         </div>
         <div class="mt-3 space-y-1 px-2">
-          <a
-            href="#"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-            >Your Profile</a
-          >
-          <a
-            href="#"
-            class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-            >Settings</a
-          >
           <a
             href="#"
             class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
@@ -224,15 +193,23 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { removeCookie } from "typescript-cookie";
+import { getCookie, removeCookie } from "typescript-cookie";
+import { authStore } from "~/stores/authStore";
+const auth = authStore();
+await auth.fetchUser();
 const userMenu = ref(false);
 const mobileMenu = ref(false);
+const user = auth.user;
 
-const logout = () => {
+const logout = async () => {
+  await useCustomFetch("users/logout/blacklist/", {
+    method: "POST",
+    body: { refresh_token: getCookie("refresh") },
+  });
   removeCookie("access");
   removeCookie("refresh");
   removeCookie("user_id");
   removeCookie("user");
-  window.location.href = "/login";
+  window.location.href = "/auth/login";
 };
 </script>

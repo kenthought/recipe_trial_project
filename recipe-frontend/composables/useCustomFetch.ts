@@ -44,10 +44,9 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
             })
         }  else {
             console.log('Refresh token is expired', tokenParts.exp, now);
-            removeCookie("access");
-            removeCookie("refresh");
-            removeCookie("user");
             removeCookie("user_id");
+            removeCookie("refresh");
+            removeCookie("access");
             window.location.href = '/auth/login';
             
             return;
@@ -74,10 +73,9 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
         }
     }  else {
         console.log('Refresh token not available.');
-        removeCookie("access");
-        removeCookie("refresh");
-        removeCookie("user");
         removeCookie("user_id");
+        removeCookie("refresh");
+        removeCookie("access");
         window.location.href = '/auth/login';
         return;
      }

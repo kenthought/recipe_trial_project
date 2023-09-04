@@ -118,5 +118,6 @@ console.log();
 
 definePageMeta({
   middleware: ["auth"],
+  layout: false,
 });
 </script>

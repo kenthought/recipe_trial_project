@@ -31,7 +31,7 @@
             <div class="mt-4 flex justify-between">
               <div>
                 <h3 class="text-sm text-gray-700">
-                  <NuxtLink :to="'dashboard/recipe/' + item.id">
+                  <NuxtLink :to="'recipe/' + item.id">
                     <span aria-hidden="true" class="absolute inset-0"></span>
                     {{ item.recipe }}
                   </NuxtLink>

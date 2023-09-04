@@ -99,10 +99,19 @@
 const props = defineProps({
   data: {
     type: String,
+    required: true,
+  },
+  refresh: {
+    type: Function,
+    required: true,
+  },
+  redirect: {
+    type: Boolean,
     required: false,
   },
 });
 const recipeData = JSON.parse(props.data as string);
+const emit = defineEmits(["close-modal"]);
 
 const deleteRecipe = async () => {
   const { data, error }: any = await useCustomFetch(
@@ -114,9 +123,11 @@ const deleteRecipe = async () => {
   );
 
   if (error.value == null) {
-    navigateTo("/dashboard");
-  } else {
-    console.log(error.value);
+    if (props.redirect == true) navigateTo("/");
+    else {
+      emit("close-modal", false);
+      props.refresh();
+    }
   }
 };
 </script>

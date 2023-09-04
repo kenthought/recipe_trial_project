@@ -82,16 +82,19 @@
           </div>
         </div>
         <AddRecipeModal
-          v-show="addRecipeModal"
+          v-if="addRecipeModal"
           @close-modal="addRecipeModal = false"
           :refresh="refresh"
           :isEditing="true"
           :editData="JSON.stringify({ ...data })"
+          :redirect="false"
         />
         <DeleteRecipeModal
-          v-show="deleteRecipeModal"
+          v-if="deleteRecipeModal"
           @close-modal="deleteRecipeModal = false"
           :data="JSON.stringify({ ...data })"
+          :refresh="refresh"
+          :redirect="true"
         />
       </div>
     </div>
@@ -102,12 +105,14 @@ import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
 
 const auth = authStore();
+await auth.fetchUser();
 const route = useRoute();
 const layout = "dashboard";
 const addRecipeModal = ref(false);
 const deleteRecipeModal = ref(false);
-await auth.fetchUser();
 const user: any = auth.user;
+
+// Fetch recipe details
 const { data, error, pending, refresh }: any = useCustomFetch(
   "recipe/" + route.params.id,
   {

@@ -161,12 +161,12 @@
 
             <!-- Toast -->
             <Success
-              v-show="successState.success"
+              v-if="successState.success"
               :successText="successState.text"
               @close-save="successState.success = false"
             />
             <Error
-              v-show="errorState.error"
+              v-if="errorState.error"
               :errorText="errorState.text"
               @close-error="errorState.error = false"
             />
@@ -210,15 +210,21 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  redirect: {
+    type: Boolean,
+    required: true,
+  },
 });
-let form: any = props.isEditing
-  ? JSON.parse(props.editData as string)
-  : {
-      recipe: "",
-      ingredients: "",
-      instructions: "",
-      user: 0,
-    };
+const emit = defineEmits(["close-modal"]);
+let form: any =
+  props.isEditing == true
+    ? JSON.parse(props.editData as string)
+    : {
+        recipe: "",
+        ingredients: "",
+        instructions: "",
+        user: 0,
+      };
 let successState = reactive({ success: false, text: "" });
 let errorState = reactive({ error: false, text: "" });
 
@@ -233,7 +239,6 @@ const handleSuccess = () => {
     ? "Recipe edited successfully!"
     : "Recipe added successfully!";
   successState.success = true;
-  props.refresh();
 };
 
 const handleSubmit = async () => {
@@ -253,6 +258,10 @@ const handleSubmit = async () => {
 
   if (error.value == null) {
     handleSuccess();
+    if (props.redirect == true) {
+      props.refresh();
+      emit("close-modal", false);
+    } else props.refresh();
   } else {
     errorState.text = error.value;
     errorState.error = true;

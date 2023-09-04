@@ -6,6 +6,7 @@ type Token = {
     access: string
   }
 
+// Customized useFetch for rotating tokens
 export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {}) {
     let headers: any = {}
     let refreshToken: string  = "";
@@ -47,7 +48,7 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
             removeCookie("refresh");
             removeCookie("user");
             removeCookie("user_id");
-            window.location.href = '/login';
+            window.location.href = '/auth/login';
             
             return;
         }
@@ -77,7 +78,7 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
         removeCookie("refresh");
         removeCookie("user");
         removeCookie("user_id");
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
         return;
      }
 

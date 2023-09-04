@@ -21,9 +21,10 @@ type Token = {
   access: string
 }
 
+// Used pinia store for user authentication
 export const authStore = defineStore('auth', () => {
     const user = reactive(ref<User | null>(null))
-    const userCookie = useCookie("user");
+    const userCookie = useCookie("access");
     const isLoggedIn = computed(() => !!userCookie.value)
 
     const fetchUser = async () => {
@@ -59,7 +60,7 @@ export const authStore = defineStore('auth', () => {
               user_id.value = fetchedUser.id.toString();
 
               fetchUser();
-              window.location.href = '/dashboard';
+              window.location.href = '/';
       }).catch(error => {
               console.log("loginError:", error)
             })

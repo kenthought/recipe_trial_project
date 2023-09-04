@@ -42,7 +42,7 @@
                 class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
                 aria-current="page"
               >
-                Go to User dashboard</NuxtLink
+                Go to user dashboard</NuxtLink
               >
             </div>
           </div>
@@ -170,6 +170,15 @@
           class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
           aria-current="page"
           >Users
+        </NuxtLink>
+      </div>
+      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+        <NuxtLink
+          to="/"
+          class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+          aria-current="page"
+          >Go to user dashboard
         </NuxtLink>
       </div>
       <div class="border-t border-gray-700 pb-3 pt-4">

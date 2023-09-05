@@ -24,8 +24,10 @@ type Token = {
 export const authStore = defineStore('auth', () => {
     const user = reactive(ref<User | null>(null))
     const userCookie = useCookie("refresh");
+    // Check if user logged in by checking if refresh token
     const isLoggedIn = computed(() => !!userCookie.value)
 
+    // Fetch user data
     const fetchUser = async () => {
       const user_id = useCookie("user_id");
       const {data, error} : any = await useCustomFetch("users/" + user_id.value)
@@ -35,6 +37,8 @@ export const authStore = defineStore('auth', () => {
         user.value = data;
     }
     
+    // User login
+    // After successfull login, store the tokens in cookies
     const login = async (credentials: Credentials) => {
           let fetchedUser: User = {} as User;
 

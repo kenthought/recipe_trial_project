@@ -31,7 +31,8 @@ export const authStore = defineStore('auth', () => {
       const {data, error} : any = await useCustomFetch("users/" + user_id.value)
       console.log("Data:", data.value)
       console.log("Error:", error.value)
-      user.value = data;
+      if(error.value == null)
+        user.value = data;
     }
     
     const login = async (credentials: Credentials) => {

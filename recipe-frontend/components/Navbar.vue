@@ -172,7 +172,10 @@
           >My Recipe
         </NuxtLink>
       </div>
-      <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+      <div
+        class="space-y-1 px-2 pb-3 pt-2 sm:px-3"
+        v-show="user?.is_superuser == 1"
+      >
         <NuxtLink
           to="/admin"
           class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"

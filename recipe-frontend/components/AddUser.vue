@@ -152,7 +152,7 @@
             type="submit"
             class="mt-5 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Add user
+            {{ isEditing ? "Edit user" : "Add user" }}
           </button>
         </div>
       </form>
@@ -208,7 +208,7 @@ const register = async () => {
     const user_id: any = temp.id;
 
     const { data, error }: any = isEditing
-      ? await useCustomFetch("users/" + user_id + "/", {
+      ? await useCustomFetch("users/details/" + user_id + "/", {
           method: "PUT",
           body: form,
         })

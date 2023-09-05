@@ -4,7 +4,7 @@ from recipe.serializers import (
     RecipeViewSerializer,
     RecipeSerializer,
 )
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.db.models import F
 from backend import custom_permissions
 from rest_framework.views import APIView
@@ -28,7 +28,10 @@ class RecipeList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RecipeDetail(APIView):
-    permissions_clases = [permissions.IsAuthenticated,custom_permissions.AdminPermission]
+    permissions_clases = [permissions.IsAuthenticated]
+
+    def has_permission(self, user):
+        return user.is_superuser == True
 
     def get_object(self, pk):
         try:
@@ -42,17 +45,21 @@ class RecipeDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        recipe = self.get_object(pk)
-        serializer = RecipeSerializer(recipe, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if(self.has_permission(request.user)):
+            recipe = self.get_object(pk)
+            serializer = RecipeSerializer(recipe, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else: return HttpResponse('Unauthorized', status=401)
 
     def delete(self, request, pk, format=None):
-        recipe = self.get_object(pk)
-        recipe.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if(self.has_permission(request.user)):
+            recipe = self.get_object(pk)
+            recipe.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else: return HttpResponse('Unauthorized', status=401)
     
 # Fetch user recipes
 class UserRecipeList(APIView):

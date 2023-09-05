@@ -11,6 +11,8 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
     let headers: any = {}
     let refreshToken: string  = "";
 
+    // Checks if process is in SSR or CSR and fetch Cookies
+    // useCookie for SSR and getCookie for CSR
     if(process.server) {
         const temp : any = useCookie("refresh")
         refreshToken = temp.value as string
@@ -24,6 +26,9 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
         const tokenParts = JSON.parse(atob(refreshToken.split(".")[1]));
         const now = Math.ceil(Date.now() / 1000);
 
+        // Checks if access token is expired
+        // If yes refresh the token. Store the refresh and access in
+        // Cookies
         if(tokenParts.exp > now) {
             useFetch("http://127.0.0.1:8000/api/token/refresh/", { 
                 method: "POST",
@@ -52,6 +57,8 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
             return;
         }
 
+        // Checks if process is in SSR or CSR. Fetch refresh and access 
+        // cookie by getCookie if the process is CSR or useCookie in SSR
         if(process.server) {
             const access = useCookie("access");
             headers = {
@@ -78,13 +85,6 @@ export function useCustomFetch<T> (path: string, options: UseFetchOptions<T> = {
         removeCookie("access");
         window.location.href = '/auth/login';
         return;
-     }
-
-     if(process.server) {
-        headers = {
-            ...headers,
-            ...useRequestHeaders(['cookie'])
-        }
      }
 
     return useFetch("http://127.0.0.1:8000/api/" + path, {

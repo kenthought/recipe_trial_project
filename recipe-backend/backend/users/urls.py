@@ -6,6 +6,7 @@ urlpatterns = [
     path("", UserList.as_view()),
     path("<int:pk>/", UserDetail.as_view()),
     path("register/", RegisterUser.as_view()),
+    path("details/<int:pk>/", AdminUserDetail.as_view()),
     path("logout/blacklist/", BlacklistTokenUpdateView.as_view(), name="blacklist"),
 ]
 

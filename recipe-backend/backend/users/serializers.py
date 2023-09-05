@@ -30,8 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "middle_name",
-            "password",
             "last_name",
+            "password",
             "is_staff",
             "is_superuser",
         ]
@@ -49,5 +49,12 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password", None)
         if password is not None:
             instance.set_password(password)
+            instance.username = validated_data.get('email', instance.email)
+            instance.email = validated_data.get('email', instance.email)
+            instance.first_name = validated_data.get('first_name', instance.first_name)
+            instance.middle_name = validated_data.get('middle_name', instance.middle_name)
+            instance.last_name = validated_data.get('last_name', instance.last_name)
+            instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+            instance.is_superuser = validated_data.get('is_superuser', instance.is_superuser)
         instance.save()
         return instance

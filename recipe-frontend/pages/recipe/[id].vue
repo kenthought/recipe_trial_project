@@ -4,6 +4,9 @@
       <div class="pt-6" v-if="pending">
         <p>Loading...</p>
       </div>
+      <div class="pt-6" v-else-if="error">
+        <p>{{ error }}</p>
+      </div>
       <div class="pt-6" v-else>
         <nav aria-label="Breadcrumb" v-if="data.user.id == user.id">
           <ol
@@ -47,7 +50,7 @@
               class="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg"
             >
               <img
-                src="https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg"
+                src="https://picsum.photos/200/300"
                 alt="Model wearing plain white basic tee."
                 class="h-full w-full object-cover object-center"
               />
@@ -79,16 +82,19 @@
           </div>
         </div>
         <AddRecipeModal
-          v-show="addRecipeModal"
+          v-if="addRecipeModal"
           @close-modal="addRecipeModal = false"
           :refresh="refresh"
           :isEditing="true"
           :editData="JSON.stringify({ ...data })"
+          :redirect="false"
         />
         <DeleteRecipeModal
-          v-show="deleteRecipeModal"
+          v-if="deleteRecipeModal"
           @close-modal="deleteRecipeModal = false"
           :data="JSON.stringify({ ...data })"
+          :refresh="refresh"
+          :redirect="true"
         />
       </div>
     </div>
@@ -97,21 +103,19 @@
 <script setup lang="ts">
 import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
-import { useCustomFetch } from "../../../composables/useCustomFetch";
-import AddRecipeModal from "../../../components/modals/AddRecipeModal.vue";
-import DeleteRecipeModal from "../../../components/modals/DeleteRecipeModal.vue";
 
 const auth = authStore();
+await auth.fetchUser();
 const route = useRoute();
 const layout = "dashboard";
 const addRecipeModal = ref(false);
 const deleteRecipeModal = ref(false);
-await auth.fetchUser();
 const user: any = auth.user;
+
+// Fetch recipe details
 const { data, error, pending, refresh }: any = useCustomFetch(
   "recipe/" + route.params.id,
   {
-    server: false,
     lazy: true,
   }
 );
@@ -119,5 +123,6 @@ console.log();
 
 definePageMeta({
   middleware: ["auth"],
+  layout: false,
 });
 </script>

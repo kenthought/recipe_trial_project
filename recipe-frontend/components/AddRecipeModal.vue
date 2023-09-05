@@ -107,7 +107,7 @@
                           ></textarea>
                         </div>
                       </div>
-
+                      <!-- For uploading recipe photo -->
                       <!-- <div class="col-span-full">
                         <label
                           for="photo"
@@ -160,8 +160,16 @@
             </div>
 
             <!-- Toast -->
-            <Success :success="success" :successText="successText" />
-            <Error :error="errorState" :errorText="errorText" />
+            <Success
+              v-if="successState.success"
+              :successText="successState.text"
+              @close-save="successState.success = false"
+            />
+            <Error
+              v-if="errorState.error"
+              :errorText="errorState.text"
+              @close-error="errorState.error = false"
+            />
             <div
               class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
             >
@@ -186,10 +194,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useCustomFetch } from "../../composables/useCustomFetch";
-import { authStore } from "../../stores/authStore";
-import Success from "../utility/Success.vue";
-import Error from "../utility/Error.vue";
+import { authStore } from "../stores/authStore";
 import { ref } from "vue";
 const auth = authStore();
 const props = defineProps({
@@ -205,19 +210,23 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  redirect: {
+    type: Boolean,
+    required: true,
+  },
 });
-let form: any = props.isEditing
-  ? JSON.parse(props.editData as string)
-  : {
-      recipe: "",
-      ingredients: "",
-      instructions: "",
-      user: 0,
-    };
-let success = ref(false);
-let successText = "";
-let errorState = ref(false);
-let errorText = "";
+const emit = defineEmits(["close-modal"]);
+let form: any =
+  props.isEditing == true
+    ? JSON.parse(props.editData as string)
+    : {
+        recipe: "",
+        ingredients: "",
+        instructions: "",
+        user: 0,
+      };
+let successState = reactive({ success: false, text: "" });
+let errorState = reactive({ error: false, text: "" });
 
 const handleSuccess = () => {
   form = {
@@ -226,11 +235,10 @@ const handleSuccess = () => {
     instructions: "",
     user: 0,
   };
-  successText = props.isEditing
+  successState.text = props.isEditing
     ? "Recipe edited successfully!"
     : "Recipe added successfully!";
-  success = ref(true);
-  props.refresh();
+  successState.success = true;
 };
 
 const handleSubmit = async () => {
@@ -250,9 +258,13 @@ const handleSubmit = async () => {
 
   if (error.value == null) {
     handleSuccess();
+    if (props.redirect == true) {
+      props.refresh();
+      emit("close-modal", false);
+    } else props.refresh();
   } else {
-    errorState = ref(true);
-    errorText = error.value;
+    errorState.text = error.value;
+    errorState.error = true;
   }
 };
 </script>

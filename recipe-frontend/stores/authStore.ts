@@ -1,5 +1,4 @@
 import {defineStore} from "pinia"
-import { setCookie } from "typescript-cookie"
 
 type User = {
     id: number,
@@ -21,9 +20,10 @@ type Token = {
   access: string
 }
 
+// Used pinia store for user authentication
 export const authStore = defineStore('auth', () => {
     const user = reactive(ref<User | null>(null))
-    const userCookie = useCookie("user");
+    const userCookie = useCookie("refresh");
     const isLoggedIn = computed(() => !!userCookie.value)
 
     const fetchUser = async () => {
@@ -32,7 +32,6 @@ export const authStore = defineStore('auth', () => {
       console.log("Data:", data.value)
       console.log("Error:", error.value)
       user.value = data;
-      userCookie.value = JSON.stringify(user.value)
     }
     
     const login = async (credentials: Credentials) => {
@@ -59,7 +58,7 @@ export const authStore = defineStore('auth', () => {
               user_id.value = fetchedUser.id.toString();
 
               fetchUser();
-              window.location.href = '/dashboard';
+              window.location.href = '/';
       }).catch(error => {
               console.log("loginError:", error)
             })

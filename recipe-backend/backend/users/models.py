@@ -58,6 +58,7 @@ class UserManager(BaseUserManager):
 
 class UserData(AbstractUser, PermissionsMixin):
     email = models.EmailField(max_length=100, unique=True)
+    username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, blank=True)
     last_name = models.CharField(max_length=100)

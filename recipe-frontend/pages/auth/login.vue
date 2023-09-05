@@ -57,12 +57,21 @@
             Sign in
           </button>
         </div>
+
+        <p class="mt-10 text-center text-sm text-gray-500">
+          Not a member?
+          <NuxtLink
+            to="/auth/register"
+            class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >Sign up</NuxtLink
+          >
+        </p>
       </form>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { authStore } from "../../stores/authStore";
+import { authStore } from "~/stores/authStore";
 import { definePageMeta } from "#imports";
 const auth = authStore();
 

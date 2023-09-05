@@ -26,11 +26,29 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserData
         fields = [
             "id",
+            "username",
             "email",
             "first_name",
             "middle_name",
             "last_name",
             "is_staff",
+            "is_superuser",
+        ]
+
+
+class UserWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserData
+        fields = [
+            "id",
+            "username",
+            "email",
+            "password",
+            "first_name",
+            "middle_name",
+            "last_name",
+            "is_staff",
+            "is_superuser",
         ]
 
     def create(self, validated_data):

@@ -66,9 +66,8 @@
                 </h3>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    Are you sure you want to delete
-                    {{ recipeData.recipe }} recipe? This action cannot be
-                    undone.
+                    Are you sure you want to delete this account? This action
+                    cannot be undone.
                   </p>
                 </div>
               </div>
@@ -96,27 +95,26 @@
   </div>
 </template>
 <script setup lang="ts">
+const emit = defineEmits(["close-modal"]);
+const editData = useEditData();
 const props = defineProps({
-  data: {
-    type: String,
-    required: false,
+  refresh: {
+    type: Function,
+    required: true,
   },
 });
-const recipeData = JSON.parse(props.data as string);
 
 const deleteRecipe = async () => {
-  const { data, error }: any = await useCustomFetch(
-    "recipe/" + recipeData.id + "/",
-    {
-      method: "DELETE",
-      body: recipeData,
-    }
-  );
+  const temp: any = editData.value;
+  const user_id: any = temp.id;
+  const { data, error }: any = await useCustomFetch("users/" + user_id + "/", {
+    method: "DELETE",
+    body: temp,
+  });
 
   if (error.value == null) {
-    navigateTo("/dashboard");
-  } else {
-    console.log(error.value);
+    props.refresh();
+    emit("close-modal", false);
   }
 };
 </script>

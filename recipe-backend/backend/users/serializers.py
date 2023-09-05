@@ -30,22 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "middle_name",
-            "last_name",
-            "is_staff",
-            "is_superuser",
-        ]
-
-
-class UserWriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserData
-        fields = [
-            "id",
-            "username",
-            "email",
             "password",
-            "first_name",
-            "middle_name",
             "last_name",
             "is_staff",
             "is_superuser",
@@ -55,6 +40,13 @@ class UserWriteSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password", None)
         # as long as the fields are the same, we can just use this
         instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+    
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
         if password is not None:
             instance.set_password(password)
         instance.save()

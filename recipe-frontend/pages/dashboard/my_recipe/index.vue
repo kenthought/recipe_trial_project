@@ -65,6 +65,7 @@
         v-show="addRecipeModal"
         @close-modal="addRecipeModal = false"
         :refresh="refresh"
+        :redirect="false"
       />
     </NuxtLayout>
   </div>

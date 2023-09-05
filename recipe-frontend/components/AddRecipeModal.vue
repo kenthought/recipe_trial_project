@@ -245,13 +245,15 @@ const handleSubmit = async () => {
   await auth.fetchUser();
   const user: any = auth.user;
   form.user = user.id;
+  let api = "recipe/user/" + user.id + "/" + form.id + "/";
+  if (user.is_superuser == true) api = "recipe/" + form.id + "/";
 
   const { data, error }: any = !props.isEditing
     ? await useCustomFetch("recipe/", {
         method: "POST",
         body: form,
       })
-    : await useCustomFetch("recipe/" + form.id + "/", {
+    : await useCustomFetch(api, {
         method: "PUT",
         body: form,
       });

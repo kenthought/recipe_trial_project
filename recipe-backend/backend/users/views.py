@@ -5,6 +5,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserSerializer
 from .models import UserData
 from django.http import Http404
+from backend import custom_permissions
 
 
 # Create your views here.
@@ -18,7 +19,7 @@ class RegisterUser(APIView):
 
 
 class UserList(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,custom_permissions.AdminPermission]
 
     def get(self, request, format=None):
         user = UserData.objects.all()
@@ -27,7 +28,7 @@ class UserList(APIView):
 
 
 class UserDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,custom_permissions.UserPermission]
 
     def get_object(self, pk):
         try:
@@ -50,7 +51,7 @@ class UserDetail(APIView):
     
     
 class AdminUserDetail(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated,custom_permissions.AdminPermission]
 
     def get_object(self, pk):
         try:

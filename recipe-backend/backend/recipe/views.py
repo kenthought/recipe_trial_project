@@ -6,6 +6,7 @@ from recipe.serializers import (
 )
 from django.http import Http404
 from django.db.models import F
+from backend import custom_permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -27,7 +28,7 @@ class RecipeList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RecipeDetail(APIView):
-    permissions_clases = [permissions.IsAuthenticated]
+    permissions_clases = [permissions.IsAuthenticated,custom_permissions.AdminPermission]
 
     def get_object(self, pk):
         try:
@@ -54,7 +55,7 @@ class RecipeDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 # Fetch user recipes
-class RecipeUserList(APIView):
+class UserRecipeList(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, user):
@@ -67,4 +68,27 @@ class RecipeUserList(APIView):
         recipe = self.get_object( user)
         serializer = RecipeViewSerializer(recipe, many=True)
         return Response(serializer.data)
+
+# Update and delete user recipes
+class UserRecipeDetail(APIView):
+    permission_classes = [permissions.IsAuthenticated,custom_permissions.UserRecipePermission]
+
+    def get_object(self, user, pk):
+        try:
+            return Recipe.objects.get(user_id=user, pk=pk)
+        except Recipe.DoesNotExist:
+            raise Http404
+
+    def put(self, request, user, pk, format=None):
+        recipe = self.get_object(user,pk)
+        serializer = RecipeSerializer(recipe, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, user, pk, format=None):
+        recipe = self.get_object(user, pk)
+        recipe.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
